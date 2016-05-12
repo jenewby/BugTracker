@@ -1,0 +1,70 @@
+﻿@model IEnumerable<BugTracker.Models.Projects>
+
+@{
+    ViewBag.Title = "Projects";
+}
+<div style="padding-left:10px; padding-right: 10px;">
+    <h2>Projects</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
+
+    
+        <table id="myTablePJ" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProjectStatus)
+                    </th>
+                    <th>Management Tools</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Created.LocalDateTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProjectStatus)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Assign Users", "AssignUserToProj", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#myTablePJ').DataTable();
+
+        })
+    </script>
+    }

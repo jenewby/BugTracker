@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "NotAuthorized";
+}
+<div class="container">
+    <h1>Not Authorized</h1>
+
+    <h3>You are not authorized to complete this action</h3>
+
+    <p>
+        @*@Html.ActionLink("Back to List", "Index")*@
+        @Html.ActionLink("Back to previous page", null, null, null, new { href = Request.UrlReferrer })
+
+
+    </p>
+</div>

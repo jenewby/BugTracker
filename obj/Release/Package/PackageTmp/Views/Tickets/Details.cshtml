@@ -1,0 +1,199 @@
+﻿@model BugTracker.Models.Tickets
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tickets</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AssignedToUser)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AssignedToUser.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OwnerUser)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OwnerUser.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketPriority)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketPriority.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketStatus.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated)
+        </dd>
+
+    </dl>
+</div>
+
+
+                   <!-- Blog Comments -->
+                    <!-- Comments Form -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="well" style="background:rgba(34, 34, 34, .3); box-shadow: inset 0px 12px 25px -8px rgba(99, 136, 36,0.76);">
+                    <h4>Leave a Comment:</h4>
+@using (Html.BeginForm("CreateComment", "Tickets", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                        <div class="form-group">
+                            <textarea class="form-control transparent" rows="3" name="Comment" cols="50"></textarea>
+                            @*name for form is what value your are binding it to ie comment or cm here will transfer to equal ticketcomment's comment ie what we bind has to match what name we use in the form text area/input whatever.  example below we use name=TicketId. We set that value to equal that of the model(ticket) id then pass it over with the post bind.*@  
+
+                            <input type="hidden" name="TicketId" value="@Model.Id" />
+                           @* Model.id represents the passing
+    <input class="form-control" rows="3" name="Body" />*@
+                        </div>
+                        <div class="form-group">
+                            @*<span class="control-label col-md-2", style = "color:black; text-shadow: 2px 2px 8px white">Upload File</span>*@
+                            <div class="col-md-10" style="padding-left:0px;">
+                                <input type="file" class="form-control" name="img" id="fileUpload" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+}
+                </div>
+        
+                <hr>
+
+                <!-- Posted Comments -->
+                @{int i = 1;}
+                @foreach (var cmt in Model.TicketComments)
+                {
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" style="height:64px;" src="~/img/User_Avatar-36-512.png" alt="">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                @cmt.User.DisplayName
+                                <small style="color: #638824;">@cmt.Created</small>
+                            </h4>
+                            <span style="color:#1A1A1A;">@cmt.Comment</span>
+                            <div class="panel-group">
+                                <div class="panel panel-default" style="margin-top:10px;">
+                                    <div class="panel-heading" style="background:rgba(34, 34, 34, .1); box-shadow: inset 0px 12px 25px -8px rgba(99, 136, 36,0.76);">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" href="@("#"+"tr"+(i))"><i class="fa fa-plus" aria-hidden="true"></i> 
+View Attachment</a>
+                                        </h4>
+                                    </div>
+                                    <div id="tr@(i)" class="panel-collapse collapse">
+                                        <div class="panel-body">@if (cmt.FileUrl != null)
+                                        {
+                                            <img class="img-responsive" src="@Url.Content(cmt.FileUrl)" alt="" />
+                                        } </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    i++;
+                }
+                <!-- Comment -->
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" style="height:64px;" src="~/img/User_Avatar-04-512.png" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            Great Read
+                            <small>August 25, 2014 at 9:30 PM</small>
+                        </h4>
+                        <span style="color:#1A1A1A">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</span>
+                        <!-- Nested Comment -->
+                        <div class="media" style="padding-bottom:30px;">
+                            <a class="pull-left" href="#">
+                                <img class="media-object" style="height:64px;" src="~/img/User_Avatar-05-512.png" alt="">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    So helpful!
+                                    <small>August 25, 2014 at 9:30 PM</small>
+                                </h4>
+                                <span style="color:#1A1A1A">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</span>
+                            </div>
+                        </div>
+                        <!-- End Nested Comment -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>

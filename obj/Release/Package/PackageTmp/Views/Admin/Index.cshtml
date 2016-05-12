@@ -1,0 +1,43 @@
+﻿@model IEnumerable<BugTracker.Models.RoleAdminViewModel>
+
+@*each page can only use a maximum of 1 model.  This page is already using the ApplicationUser model, but needs to access the user role model/table in order to populate the various possible roles. place user role/model in viewbag*@
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List of Users & Roles</h2>
+<div class="container">
+    <div class="row">
+        <table class="table" id="myTableU">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Display Name</th>
+                    <th>Roles</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                // Application user is the default model for the user table.
+                //user.username... once typing up user(dot), all available items in user table become available ie user
+                {
+                    <tr>
+
+                        <td>@user.User.UserName</td>
+                        <td>@user.User.DisplayName</td>
+                        <td>
+                            @foreach (var role in user.Role)
+                        {
+                            <p> @role</p>
+                        }
+                    </td>
+                    <td>@Html.ActionLink("Assign Roles", "EditUser", new { id = user.User.Id }) </td>
+                </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>

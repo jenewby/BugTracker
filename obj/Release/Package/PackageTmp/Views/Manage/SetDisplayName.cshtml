@@ -1,0 +1,34 @@
+﻿@model BugTracker.Models.SetDisplayNameViewModel
+
+@{
+    ViewBag.Title = "SetDisplayName";
+}
+
+<h2>SetDisplayName</h2>
+
+@using (Html.BeginForm("SetDisplayName", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Change Display Name</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    @*<div class="form-group">
+        @Html.LabelFor(m => m.OldPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+        </div>
+    </div>*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.DisplayName, new { @class = "col-md-2 control-label" })
+        @*creates a label for the input box*@
+
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.DisplayName, new { @class = "form-control" })
+
+            @*EditorFor creates an input box*@
+        </div>
+    </div>
+
+    <button type="submit">Submit</button>
+
+}
