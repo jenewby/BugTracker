@@ -10,6 +10,7 @@ using BugTracker.Models;
 using Microsoft.AspNet.Identity;
 using System.IO;
 using BugTracker.Helpers;
+using System.Threading.Tasks;
 
 namespace BugTracker
 {[Authorize]
@@ -91,6 +92,8 @@ namespace BugTracker
             if (ModelState.IsValid)
             {
                 tickets.Created = System.DateTimeOffset.Now;
+                tickets.Updated = System.DateTimeOffset.Now;
+
                 //tickets.AssignedToUserId = "";
                 tickets.OwnerUserId = User.Identity.GetUserId();
                 db.Tickets.Add(tickets);
@@ -147,11 +150,118 @@ namespace BugTracker
     // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Tickets tickets)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Tickets tickets)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(tickets).State = EntityState.Modified;
+            
+                var oldTic = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == tickets.Id);
+                db.Tickets.Attach(tickets);
+                db.Entry(tickets).Property("TicketTypeId").IsModified = true;
+                //this is the syntax for allowing to modify in a database. I cant change value in database without this syntax
+                db.Entry(tickets).Property("Title").IsModified = true;
+                db.Entry(tickets).Property("Description").IsModified = true;
+                db.Entry(tickets).Property("AssignedToUserId").IsModified = true;
+                db.Entry(tickets).Property("TicketPriorityId").IsModified = true;
+                db.Entry(tickets).Property("TicketStatusId").IsModified = true;
+                db.Entry(tickets).Property("Updated").IsModified = true;
+
+                if (oldTic.Title != tickets.Title) {
+                    //Creating a ticket history to populate database
+                    TicketHistories ticketHistory1 = new TicketHistories();
+                    ticketHistory1.TicketId = tickets.Id;
+                    ticketHistory1.Property = "Title";
+                    ticketHistory1.UserId = User.Identity.GetUserId();
+                    ticketHistory1.OldValue = oldTic.Title;
+                    ticketHistory1.NewValue = tickets.Title;
+                    ticketHistory1.Changed = DateTimeOffset.Now;
+                    db.TicketHistories.Add(ticketHistory1);
+                }
+                if (oldTic.TicketTypeId != tickets.TicketTypeId)
+                {
+                    //Creating a ticket history to populate database
+                    TicketHistories ticketHistory2 = new TicketHistories();
+                    ticketHistory2.TicketId = tickets.Id;
+                    ticketHistory2.Property = "TicketTypeId";
+                    ticketHistory2.UserId = User.Identity.GetUserId();
+                    ticketHistory2.OldValue = oldTic.TicketType.Name;
+                    ticketHistory2.NewValue = db.TicketTypes.Find(tickets.TicketTypeId).Name;
+                    ticketHistory2.Changed = DateTimeOffset.Now;
+                    db.TicketHistories.Add(ticketHistory2);
+                }
+
+                if (oldTic.TicketPriorityId != tickets.TicketPriorityId)
+                {
+                    //Creating a ticket history to populate database
+                    TicketHistories ticketHistory3 = new TicketHistories();
+                    ticketHistory3.TicketId = tickets.Id;
+                    ticketHistory3.Property = "TicketPriorityId";
+                    ticketHistory3.UserId = User.Identity.GetUserId();
+                    ticketHistory3.OldValue = oldTic.TicketPriority.Name;
+                    ticketHistory3.NewValue = db.TicketPriorities.Find(tickets.TicketPriorityId).Name;
+                    ticketHistory3.Changed = DateTimeOffset.Now;
+                    db.TicketHistories.Add(ticketHistory3);
+                }
+
+                if (oldTic.TicketStatusId != tickets.TicketStatusId)
+                {
+                    //Creating a ticket history to populate database
+                    TicketHistories ticketHistory4 = new TicketHistories();
+                    ticketHistory4.TicketId = tickets.Id;
+                    ticketHistory4.Property = "TicketStatusId";
+                    ticketHistory4.UserId = User.Identity.GetUserId();
+                    ticketHistory4.OldValue = oldTic.TicketStatus.Name;
+                    ticketHistory4.NewValue = db.TicketStatuses.Find(tickets.TicketStatusId).Name;
+                    ticketHistory4.Changed = DateTimeOffset.Now;
+                    db.TicketHistories.Add(ticketHistory4);
+                }
+
+                if (oldTic.Description != tickets.Description)
+                {
+                    //Creating a ticket history to populate database
+                    TicketHistories ticketHistory5 = new TicketHistories();
+                    ticketHistory5.TicketId = tickets.Id;
+                    ticketHistory5.Property = "Description";
+                    ticketHistory5.UserId = User.Identity.GetUserId();
+                    ticketHistory5.OldValue = oldTic.Description;
+                    ticketHistory5.NewValue = tickets.Description;
+                    ticketHistory5.Changed = DateTimeOffset.Now;
+                    db.TicketHistories.Add(ticketHistory5);
+                }
+
+                if (oldTic.AssignedToUserId != tickets.AssignedToUserId)
+                {
+                    //Creating a ticket history to populate database
+                    TicketHistories ticketHistory6 = new TicketHistories();
+                    ticketHistory6.TicketId = tickets.Id;
+                    ticketHistory6.Property = "AssignedToUserId";
+                    ticketHistory6.UserId = User.Identity.GetUserId();
+                    if(oldTic.AssignedToUser != null)
+                    {
+                        ticketHistory6.OldValue = (oldTic.AssignedToUser.FirstName + " " + oldTic.AssignedToUser.LastName);
+                    }
+                    ticketHistory6.NewValue = db.Users.Find(tickets.AssignedToUserId).FirstName + " " + db.Users.Find(tickets.AssignedToUserId).LastName;
+                    ticketHistory6.Changed = DateTimeOffset.Now;
+                    db.TicketHistories.Add(ticketHistory6);
+
+                    Projects originalProject = db.Projects.Find(oldTic.Project.Id);
+
+                    var callbackUrl = Url.Action("MyTickets");
+                    EmailService Email = new EmailService();
+                    IdentityMessage im = new IdentityMessage();
+                    im.Destination = db.Users.Find(tickets.AssignedToUserId).Email;
+                    im.Subject = "You have been assigned to a Ticket";
+                    im.Body = "You have been assigned to a ticket under the " + originalProject.name + " project. Click the link to check the ticket! < a href =\"" + callbackUrl + "\">here</a>";
+
+                    await Email.SendAsync(im);
+
+                }
+
+                //db.Tickets.AsNoTracking().FirstOrDefault(t =>t.Id == tickets.Id);
+                //db.Entry(tickets).State = EntityState.Modified;
+                // using find creates problems bc using find pulls from the ticket in memory as opposed to the ticket in server so changes will keep changing and wont be able to save an old
+                tickets.Updated = System.DateTimeOffset.Now;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -8,6 +8,9 @@
 
     <p>
         @Html.ActionLink("Create New", "Create")
+        @Html.ActionLink("All Tickets", "Index", "Tickets", new { @class = "btn btn-success", @style = "color:white; margin-left: 15px;" })
+
+
     </p>
     <table id="myTableTK2" class="table">
         <thead>
@@ -90,5 +93,5 @@
             }
         </tbody>
     </table>
-    @Html.ActionLink("All Tickets", "Tickets", "Tickets", new { @class = "btn btn-success", @style = "color:white" })
+    @Html.ActionLink("All Tickets", "Index", "Tickets", new { @class = "btn btn-success", @style = "color:white; margin-bottom: 20px;" })
 </div>

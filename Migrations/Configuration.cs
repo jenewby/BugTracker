@@ -58,6 +58,35 @@ namespace BugTracker.Migrations
             //    roleManager.Create(new IdentityRole { Name = "Moderator" });
             //}
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            if (!context.Users.Any(u => u.Email == "ProjectManager@demoEmail.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "ProjectManager@demoEmail.com",
+                    Email = "ProjectManager@demoEmail.com",
+                    FirstName = "PM.Demo",
+                    LastName = "UserPM",
+                    DisplayName = "ProjectManagerDemoUser"
+                }, "Password-4");
+            }
+            if (!context.Users.Any(u => u.Email == "Developer@demoEmail.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "Developer@demoEmail.com",
+                    FirstName = "DV.Demo",
+                    LastName = "UserDV",
+                    Email = "Developer@demoEmail.com",
+                    DisplayName = "DeveloperDemoUser"
+                }, "Password-3");
+            }
+            var userId3 = userManager.FindByEmail("ProjectManager@demoEmail.com").Id;
+            userManager.AddToRole(userId3, "Project Manager");
+
+            var userId4 = userManager.FindByEmail("Developer@demoEmail.com").Id;
+            userManager.AddToRole(userId4, "Developer");
+
             //if (!context.Users.Any(u => u.Email == "jenewby54n@yahoo.com"))
             //{
             //    userManager.Create(new ApplicationUser

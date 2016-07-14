@@ -47,7 +47,7 @@ namespace BugTracker.Models
         public DbSet<TicketAttachments> TicketAttachments { get; set; }
         public DbSet<TicketComments> TicketComments { get; set; }
         public DbSet<TicketHistories> TicketHistories { get; set; }
-        //public DbSet<TicketNotifications> TicketNotifications { get; set; }
+        public DbSet<TicketNotifications> TicketNotifications { get; set; }
         public DbSet<TicketPriorities> TicketPriorities { get; set; }
         public DbSet<Tickets> Tickets { get; set; }
         public DbSet<TicketStatuses> TicketStatuses { get; set; }

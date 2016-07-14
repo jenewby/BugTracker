@@ -11,6 +11,8 @@ namespace BugTracker.Models
         {
             this.Tickets = new HashSet<Tickets>();
             this.Users = new HashSet<ApplicationUser>();
+
+            //this is what allows me to use this set of tickets within this instance of the project.  icollection is the navigational property that points to this
             
         }
         public int Id { get; set; }

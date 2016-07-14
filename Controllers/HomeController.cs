@@ -1,6 +1,9 @@
-﻿using System;
+﻿using BugTracker.Models;
+using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -38,5 +41,22 @@ namespace BugTracker.Controllers
 
             return View();
         }
+
+        // POST: /Account/Login
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public ActionResult DemoLog (string DemoUser)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        if (DemoUser.Equals("Developer")) {
+
+        //        }
+        //        else if (DemoUser.Equals("Project Manager")) {
+
+        //        }
+        //        return View(returnUrl);
+        //    }
+        //}
     }
 }

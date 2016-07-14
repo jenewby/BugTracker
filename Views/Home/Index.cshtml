@@ -1,32 +1,34 @@
-﻿@{
+﻿@using BugTracker.Models
+
+@{
     ViewBag.Title = "Home Page";
 }
-
+<div class="container"></div>
         <div id="hello">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 centered">
-                        <h1>Bug Tracker</h1>
-                        <h2 style="background:url('~/img/ants2.png')">Keeping Track of Your Software Bugs</h2>
-                    </div><!-- /col-lg-8 -->
-                </div><!-- /row -->
-            <br />
-            <br />
-                    <div class="row">
-                        <div class="col-lg-6 col-lg-offset-6 centered">
-                            <div class="col-lg-2">
-                                <a class="navbar-brand" href="@Url.Action("Index","Home")"><i class="fa fa-group fa-4x" aria-hidden="true" style="color:black;"></i></a>
+                            <div class="col-lg-8 col-lg-offset-2 centered">
+                                <h1>Bug Tracker</h1>
+                                <h2 style="background:url('~/img/ants2.png')">Keeping Track of Your Software Bugs</h2>
+                            </div><!-- /col-lg-8 -->
+                        </div><!-- /row -->
+                        <br />
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6 col-lg-offset-6 centered">
+                                <div class="col-lg-2">
+                                    <a class="navbar-brand" href="@Url.Action("Index","Home")"><i class="fa fa-group fa-4x" aria-hidden="true" style="color:black;"></i></a>
+                                </div>
+                                <div class="col-lg-2">
+                                    <a class="navbar-brand" href="@Url.Action("Index","Home")"><i class="fa fa-briefcase fa-4x" style="color:black;"></i></a>
+                                </div>
+                                <div class="col-lg-2">
+                                    <a class="navbar-brand" href="@Url.Action("Index","Home")"><i class="fa fa-ticket fa-4x" style="color:black;"></i></a>
+                                </div>
                             </div>
-                            <div class="col-lg-2">
-                                <a class="navbar-brand" href="@Url.Action("Index","Home")"><i class="fa fa-briefcase fa-4x" style="color:black;"></i></a>
-                            </div>
-                            <div class="col-lg-2">
-                                <a class="navbar-brand" href="@Url.Action("Index","Home")"><i class="fa fa-ticket fa-4x" style="color:black;"></i></a>
-                            </div>
-                    </div>
-                </div>
-            </div> <!-- /container -->
-        </div><!-- /hello -->
+                        </div>
+                    </div> <!-- /container -->
+                </div><!-- /hello -->
 @*<h3 style="color:black;">CONTROLLERS</h3>
 <h5 style="color:black;">ADMIN ONLY <i class="fa fa-lock"></i></h5>*@
     @*<section style="background-color:white">

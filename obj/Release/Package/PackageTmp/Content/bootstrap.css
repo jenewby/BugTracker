@@ -334,12 +334,6 @@ textarea {
   background-image: none;
 }
 
-a {
-  color: black; 
-  text-shadow: 2px 2px 8px #638824;
-  text-decoration: none;
-}
-
 a:hover,
 a:focus {
   color: #2a6496;
